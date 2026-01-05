@@ -11,7 +11,7 @@
   --font-size-headline-4: 1.25rem; /* 20px */
   --font-size-body-1: 1rem; /* 16px */
   --font-size-body-2: 0.85rem; /* 14px */
-  --font-size-body-2s: 0.75rem; /* 12px */
+  --font-size-body-3: 0.75rem; /* 12px */
 
   --font-weight-headline: 600; /* semibold */
   --font-weight-body: 500; /* medium */
@@ -34,10 +34,14 @@
   --color-brand-red: #eb5164;
 
   --color-white: #ffffff;
+
+  /* 4:3 Aspect Ratio */
+  --aspect-retro: 16 / 9; 
 }
 
 /* Typography Utility Classes */
 @layer utilities {
+  /* Headlines */
   .text-headline-1 {
     font-size: var(--font-size-headline-1);
     font-weight: var(--font-weight-headline);
@@ -58,6 +62,7 @@
     font-weight: var(--font-weight-headline);
   }
 
+  /* Body Text */
   .text-body-1 {
     font-size: var(--font-size-body-1);
     font-weight: var(--font-weight-body);
@@ -67,8 +72,25 @@
     font-size: var(--font-size-body-2);
     font-weight: var(--font-weight-body);
   }
-  .text-body-2s {
-    font-size: var(--font-size-body-2s);
+  .text-body-3 {
+    font-size: var(--font-size-body-3);
     font-weight: var(--font-weight-body);
   }
+
+  /* Background Colors */
+  .bg-brown-600-custom {
+    background-color: var(--color-brown-600);
+  }
+  .bg-brown-100-custom {
+    background-color: var(--color-brown-100);
+  }
+
+  /*Custom Colors */
+  .color-brown-300-custom {
+    color: var(--color-brown-300);
+  }
+  body{
+    background-color: var(--color-brown-100);
+  }
 }
+

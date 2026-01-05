@@ -73,3 +73,36 @@ export default defineConfig([
   },
 ])
 ```
+
+
+
+
+
+
+
+
+
+
+
+# Custome markdown file 
+
+## Feature-Based Structure (Scalable/Large Projects) 
+For larger applications, organizing code by business domain or feature makes the project more maintainable and easier to scale. Related files (components, hooks, styles, tests) for a specific feature are kept in the same folder. 
+```
+src/
+├── features/
+│   ├── authentication/  # Grouped by specific functionality (feature)
+│   │   ├── components/  # Feature-specific components
+│   │   ├── hooks/
+│   │   ├── api/         # API calls related to authentication
+│   │   └── types.ts
+│   ├── user-profile/
+│   │   ├── components/
+│   │   └── index.tsx    # The main component for the user profile feature
+│   └── ...
+├── components/          # Only truly global, reusable UI components (e.g., Button, Layout)
+├── hooks/               # Only truly global custom hooks
+├── lib/                 # Third-party library integrations or low-level utilities
+├── App.tsx
+└── index.tsx
+```
