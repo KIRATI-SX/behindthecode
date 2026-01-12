@@ -2,7 +2,7 @@ import { Github, Linkedin, Globe } from 'lucide-react';
 
 function Footer() {
     return (
-        <footer className="flex flex-row items-center justify-between bg-brown-200 px-30 py-14.75">
+        <footer className="flex  flex-col gap-6 lg:flex-row items-center justify-between bg-brown-200 py-10 lg:px-30 lg:py-14.75">
             <div className="flex flex-row items-center gap-4">
                 <p className="text-brown-500 text-body-1">Get in touch</p>
                 <div className="flex flex-row items-center gap-4">
