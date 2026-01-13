@@ -1,7 +1,7 @@
 import TabButton from "../common/TabButton.tsx";
 import { Input } from "./input";
 import { Search } from "lucide-react";
-
+import { blogPosts } from "../../data/blogPosts";
 import {
   Select,
   SelectContent,
@@ -11,6 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import BlogCard from "../common/BlogCard.tsx";
 
 const highLightTab = ["Highlight", "Cat", "Inspiration", "Ganeral"];
 
@@ -24,8 +25,8 @@ function ArticleSection() {
         <h1 className="text-headline-3 text-brown-600">Latest articles</h1>
         <div className="flex flex-col lg:flex-row items-center justify-between gap-8 bg-brown-200 w-full  lg:h-20 w-max-[1200px] lg:h-max-[80px] lg:rounded-2xl px-6 py-2">
           <div className="hidden xl:flex lg:flex-row">
-            {highLightTab.map((tap) => (
-              <TabButton label={tap} />
+            {blogPosts.map((tap) => (
+              <TabButton label={tap.category} />
             ))}
           </div>
           <div className="flex xl:hidden">
@@ -36,9 +37,9 @@ function ArticleSection() {
               <SelectContent>
                 <SelectGroup>
                   <SelectLabel>Topic</SelectLabel>
-                  {
-                    highLightTab.map((tap)=><SelectItem value={tap.toLowerCase()}>{tap}</SelectItem>)
-                  }
+                  {highLightTab.map((tap) => (
+                    <SelectItem value={tap.toLowerCase()}>{tap}</SelectItem>
+                  ))}
                 </SelectGroup>
               </SelectContent>
             </Select>
@@ -56,6 +57,32 @@ function ArticleSection() {
           </div>
         </div>
       </section>
+
+      {/* Card Section */}
+      <section>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 px-4 py-6 lg:px-28.5 lg:pb-20">
+          {blogPosts.map((post) => {
+            return (
+              <BlogCard
+                key={post.id}
+                image={post.image}
+                category={post.category}
+                title={post.title}
+                description={post.description}
+                author={post.author}
+                date={post.date}
+              />
+            );
+          })}
+        </div>
+      </section>
+
+      {/* view more */}
+      <div className="flex flex-col justify-center items-center pb-20">
+        <button type="button" className="text-body-1 hover:text-gray-400">
+          <u>View more </u>
+        </button>
+      </div>
     </>
   );
 }
