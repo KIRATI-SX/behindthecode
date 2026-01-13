@@ -13,9 +13,10 @@ import {
 } from "@/components/ui/select";
 import BlogCard from "../common/BlogCard.tsx";
 
-const highLightTab = ["Highlight", "Cat", "Inspiration", "Ganeral"];
-
 function ArticleSection() {
+  // Get unique categories from blogPosts
+  const uniqueCategories = [...new Set(blogPosts.map((post) => post.category))];
+
   return (
     <>
       <section
@@ -25,8 +26,8 @@ function ArticleSection() {
         <h1 className="text-headline-3 text-brown-600">Latest articles</h1>
         <div className="flex flex-col lg:flex-row items-center justify-between gap-8 bg-brown-200 w-full  lg:h-20 w-max-[1200px] lg:h-max-[80px] lg:rounded-2xl px-6 py-2">
           <div className="hidden xl:flex lg:flex-row">
-            {blogPosts.map((tap) => (
-              <TabButton label={tap.category} />
+            {uniqueCategories.map((category) => (
+              <TabButton key={category} label={category} />
             ))}
           </div>
           <div className="flex xl:hidden">
@@ -37,8 +38,10 @@ function ArticleSection() {
               <SelectContent>
                 <SelectGroup>
                   <SelectLabel>Topic</SelectLabel>
-                  {highLightTab.map((tap) => (
-                    <SelectItem value={tap.toLowerCase()}>{tap}</SelectItem>
+                  {uniqueCategories.map((category) => (
+                    <SelectItem key={category} value={category.toLowerCase()}>
+                      {category}
+                    </SelectItem>
                   ))}
                 </SelectGroup>
               </SelectContent>
