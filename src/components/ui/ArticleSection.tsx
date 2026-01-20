@@ -13,9 +13,13 @@ import {
 } from "@/components/ui/select";
 import BlogCard from "../common/BlogCard.tsx";
 
+
+
 function ArticleSection() {
   // Get unique categories from blogPosts
   const uniqueCategories = [...new Set(blogPosts.map((post) => post.category))];
+
+
 
   return (
     <>
