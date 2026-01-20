@@ -1,3 +1,4 @@
+import { useState } from "react";
 import TabButton from "../common/TabButton.tsx";
 import { Input } from "./input";
 import { Search } from "lucide-react";
@@ -13,13 +14,14 @@ import {
 } from "@/components/ui/select";
 import BlogCard from "../common/BlogCard.tsx";
 
-
-
 function ArticleSection() {
   // Get unique categories from blogPosts
-  const uniqueCategories = [...new Set(blogPosts.map((post) => post.category))];
+  const uniqueCategories = [
+    "Highlight",
+    ...new Set(blogPosts.map((post) => post.category)),
+  ];
 
-
+  const [activeCategory, setActiveCategory] = useState("Highlight");
 
   return (
     <>
@@ -31,11 +33,19 @@ function ArticleSection() {
         <div className="flex flex-col lg:flex-row items-center justify-between gap-8 bg-brown-200 w-full  lg:h-20 w-max-[1200px] lg:h-max-[80px] lg:rounded-2xl px-6 py-2">
           <div className="hidden xl:flex lg:flex-row">
             {uniqueCategories.map((category) => (
-              <TabButton key={category} label={category} />
+              <TabButton
+                key={category}
+                label={category}
+                isActive={activeCategory === category}
+                onClick={() => setActiveCategory(category)}
+              />
             ))}
           </div>
           <div className="flex xl:hidden">
-            <Select>
+            <Select
+              value={activeCategory}
+              onValueChange={(value) => setActiveCategory(value)}
+            >
               <SelectTrigger className=" w-max-72 w-72 sm:w-72 lg:w-[360px] !h-12 py-0 pl-10">
                 <SelectValue placeholder="Select a topic" />
               </SelectTrigger>
@@ -43,7 +53,7 @@ function ArticleSection() {
                 <SelectGroup>
                   <SelectLabel>Topic</SelectLabel>
                   {uniqueCategories.map((category) => (
-                    <SelectItem key={category} value={category.toLowerCase()}>
+                    <SelectItem key={category} value={category}>
                       {category}
                     </SelectItem>
                   ))}

@@ -1,10 +1,14 @@
-// components/ui/Button.tsx
 type ButtonProps = {
   children: React.ReactNode;
   variant?: "primary" | "outline";
+  className?: string;
 };
 
-export function Button({ children, variant = "outline" }: ButtonProps) {
+export function Button({
+  children,
+  variant = "outline",
+  className = "",
+}: ButtonProps) {
   return (
     <button
       className={`
@@ -15,6 +19,7 @@ export function Button({ children, variant = "outline" }: ButtonProps) {
             ? "bg-brown-600-custom text-white"
             : "border border-black text-headline-1"
         }
+        ${className}
       `}
     >
       {children}
