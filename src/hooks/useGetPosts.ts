@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { API } from '../config/api';
-
+import axios from 'axios';
 interface Post {
     id: number;
     image: string;
@@ -13,6 +13,10 @@ interface Post {
     content: string;
 }
 
+// type FetchPostsResponse = {
+//     posts: Post[];
+// }
+
 export function useGetPosts() {
     const [posts, setPosts] = useState<Post[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -21,12 +25,9 @@ export function useGetPosts() {
     useEffect(() => {
         async function fetchPosts() {
             try {
-                const response = await fetch(`${API.BASE_URL}posts`);
-                if (!response.ok) {
-                    throw new Error('Failed to fetch posts');
-                }
-                const data = await response.json();
-                setPosts(data);
+                const response = await axios.get(`${API.BASE_URL}posts`);
+               console.log(response);
+                setPosts(response.data.posts);
             } catch (error) {
                 console.error("Error fetching posts:", error);
                 setIsError(true);

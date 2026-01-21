@@ -2,7 +2,6 @@ import { useState } from "react";
 import TabButton from "../common/TabButton.tsx";
 import { Input } from "./input";
 import { Search } from "lucide-react";
-import { blogPosts } from "../../data/blogPosts";
 import {
   Select,
   SelectContent,
@@ -13,15 +12,22 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import BlogCard from "../common/BlogCard.tsx";
+import { useGetPosts } from "@/hooks/useGetPosts.ts";
 
 function ArticleSection() {
-  // Get unique categories from blogPosts
+  const { posts, isLoading, isError } = useGetPosts();
+  const [activeCategory, setActiveCategory] = useState("Highlight");
+
+  // Get unique categories from posts
   const uniqueCategories = [
     "Highlight",
-    ...new Set(blogPosts.map((post) => post.category)),
+    ...new Set(posts.map((post) => post.category)),
   ];
 
-  const [activeCategory, setActiveCategory] = useState("Highlight");
+  const filteredPosts =
+    activeCategory === "Highlight"
+      ? posts
+      : posts.filter((post) => post.category === activeCategory);
 
   return (
     <>
@@ -77,9 +83,27 @@ function ArticleSection() {
 
       {/* Card Section */}
       <section>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 px-4 py-6 lg:px-28.5 lg:pb-20">
-          {blogPosts.map((post) => {
-            return (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 px-4 py-6 lg:px-28.5 lg:pb-20 min-h-[400px]">
+          {isLoading ? (
+            <div className="col-span-full flex justify-center items-center py-20">
+              <p className="text-headline-3 text-brown-400 animate-pulse">
+                Loading articles...
+              </p>
+            </div>
+          ) : isError ? (
+            <div className="col-span-full flex justify-center items-center py-20 text-center">
+              <div>
+                <p className="text-headline-4 text-red-500 mb-2">
+                  Oops! Something went wrong.
+                </p>
+                <p className="text-body-1 text-brown-400">
+                  Failed to load articles. Please check your connection and try
+                  again.
+                </p>
+              </div>
+            </div>
+          ) : filteredPosts.length > 0 ? (
+            filteredPosts.map((post) => (
               <BlogCard
                 key={post.id}
                 image={post.image}
@@ -89,8 +113,14 @@ function ArticleSection() {
                 author={post.author}
                 date={post.date}
               />
-            );
-          })}
+            ))
+          ) : (
+            <div className="col-span-full flex justify-center items-center py-20">
+              <p className="text-body-1 text-brown-400">
+                No articles found in this category.
+              </p>
+            </div>
+          )}
         </div>
       </section>
 
