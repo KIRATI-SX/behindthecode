@@ -1,3 +1,5 @@
+import { formatDate } from "@/utils/formatDate";
+
 type propsType = {
   image: string;
   category: string;
@@ -9,6 +11,8 @@ type propsType = {
 
 function BlogCard(props: propsType) {
   const { image, category, title, description, author, date } = props;
+
+
   return (
     <div className="flex flex-col gap-4">
       <a href="#" className="relative h-[212px] sm:h-[360px]">
@@ -33,14 +37,10 @@ function BlogCard(props: propsType) {
           {description}
         </p>
         <div className="flex items-center text-sm">
-          <img
-            className="w-8 h-8 rounded-full mr-2"
-            src={image}
-            alt={author}
-          />
+          <img className="w-8 h-8 rounded-full mr-2" src={image} alt={author} />
           <span>{author}</span>
           <span className="mx-2 text-gray-300">|</span>
-          <span>{date}</span>
+          <span>{formatDate(date)}</span>
         </div>
       </div>
     </div>

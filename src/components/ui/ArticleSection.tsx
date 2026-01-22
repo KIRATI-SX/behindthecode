@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import TabButton from "../common/TabButton.tsx";
 import { Input } from "./input";
 import { Search } from "lucide-react";
@@ -14,20 +14,30 @@ import {
 import BlogCard from "../common/BlogCard.tsx";
 import { useGetPosts } from "@/hooks/useGetPosts.ts";
 
+const INITIAL_CATEGORY = "Highlight";
 function ArticleSection() {
-  const { posts, isLoading, isError } = useGetPosts();
-  const [activeCategory, setActiveCategory] = useState("Highlight");
+  const [activeCategory, setActiveCategory] = useState(INITIAL_CATEGORY);
+  const [searchTerm, setSearchTerm] = useState("");
 
-  // Get unique categories from posts
-  const uniqueCategories = [
-    "Highlight",
-    ...new Set(posts.map((post) => post.category)),
-  ];
+  const { posts, isLoading, isError } = useGetPosts({
+    category: activeCategory === INITIAL_CATEGORY ? "" : activeCategory,
+    search: searchTerm,
+  });
 
-  const filteredPosts =
-    activeCategory === "Highlight"
-      ? posts
-      : posts.filter((post) => post.category === activeCategory);
+  // Get unique categories from posts only when not filtering,
+  // or use a fixed list if categories are standard.
+  // For now, let's keep track of all categories we've seen.
+  const [allCategories, setAllCategories] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (posts.length > 0) {
+      const newCategories = [...new Set(posts.map((post) => post.category))];
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setAllCategories((prev) => [...new Set([...prev, ...newCategories])]);
+    }
+  }, [posts]);
+
+  const uniqueCategories = [INITIAL_CATEGORY, ...allCategories];
 
   return (
     <>
@@ -76,6 +86,8 @@ function ArticleSection() {
               className="w-max-[360px] w-72 lg:w-[360px] h-12 pl-10 placeholder:text-brown-400 placeholder:text-body-3"
               type="text"
               placeholder="Search"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
         </div>
@@ -102,8 +114,8 @@ function ArticleSection() {
                 </p>
               </div>
             </div>
-          ) : filteredPosts.length > 0 ? (
-            filteredPosts.map((post) => (
+          ) : posts.length > 0 ? (
+            posts.map((post) => (
               <BlogCard
                 key={post.id}
                 image={post.image}
