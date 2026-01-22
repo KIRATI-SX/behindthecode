@@ -13,4 +13,15 @@ export interface Post {
 export interface GetPostsParams {
   category?: string;
   search?: string;
+  page?: number;
+  limit?: number;
+}
+
+export interface PostsApiResponse {
+  posts: Post[];
+  totalPosts: number;
+  currentPage: number;
+  nextPage: number | null;
+  totalPages: number;
+  limit: number;
 }

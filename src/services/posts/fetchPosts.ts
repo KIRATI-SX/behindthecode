@@ -1,20 +1,18 @@
 import axios from "axios";
-import type { Post } from "../../types/post";
+import type { PostsApiResponse } from "../../types/post";
 
-interface PostsApiResponse {
-  posts: Post[];
-}
+
 
 export async function fetchPosts(
   url: string,
   signal?: AbortSignal
-): Promise<Post[]> {
+): Promise<PostsApiResponse> {
   const response = await axios.get<PostsApiResponse>(url, { signal });
-  const posts = response.data?.posts;
 
-  if (!Array.isArray(posts)) {
+
+  if (!Array.isArray(response.data.posts)) {
     throw new Error("Invalid posts response format");
   }
 
-  return posts;
+  return response.data;
 }

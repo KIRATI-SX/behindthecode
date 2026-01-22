@@ -18,7 +18,7 @@ export function useGetPosts(params: GetPostsParams = {}) {
       try {
         const url = buildPostsUrl(params);
         const data = await fetchPosts(url, controller.signal);
-        setPosts(data);
+        setPosts(data.posts);
       } catch (err) {
         if ((err as Error).name === "CanceledError") return;
         setError(err as Error);

@@ -12,14 +12,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import BlogCard from "../common/BlogCard.tsx";
-import { useGetPosts } from "@/hooks/useGetPosts.ts";
+
+import { usePaginatedPosts } from "@/hooks/usePaginatedPosts.ts";
 
 const INITIAL_CATEGORY = "Highlight";
 function ArticleSection() {
   const [activeCategory, setActiveCategory] = useState(INITIAL_CATEGORY);
   const [searchTerm, setSearchTerm] = useState("");
 
-  const { posts, isLoading, error } = useGetPosts({
+  const { posts, isLoading, hasMore, loadMore ,error} = usePaginatedPosts({
     category: activeCategory === INITIAL_CATEGORY ? "" : activeCategory,
     search: searchTerm,
   });
@@ -138,9 +139,17 @@ function ArticleSection() {
 
       {/* view more */}
       <div className="flex flex-col justify-center items-center pb-20">
-        <button type="button" className="text-body-1 hover:text-gray-400">
-          <u>View more </u>
-        </button>
+        {hasMore && (
+          <div className="flex justify-center mt-12">
+            <button
+              onClick={loadMore}
+              disabled={isLoading}
+              className="border px-10 py-3 rounded-full hover:bg-black hover:text-white transition disabled:opacity-50"
+            >
+              {isLoading ? "Loading..." : "View more"}
+            </button>
+          </div>
+        )}
       </div>
     </>
   );
