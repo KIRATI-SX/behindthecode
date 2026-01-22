@@ -1,8 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import TabButton from "../common/TabButton.tsx";
 import { Input } from "./input";
 import { Search } from "lucide-react";
-import { blogPosts } from "../../data/blogPosts";
 import {
   Select,
   SelectContent,
@@ -14,14 +13,32 @@ import {
 } from "@/components/ui/select";
 import BlogCard from "../common/BlogCard.tsx";
 
-function ArticleSection() {
-  // Get unique categories from blogPosts
-  const uniqueCategories = [
-    "Highlight",
-    ...new Set(blogPosts.map((post) => post.category)),
-  ];
+import { usePaginatedPosts } from "@/hooks/usePaginatedPosts.ts";
 
-  const [activeCategory, setActiveCategory] = useState("Highlight");
+const INITIAL_CATEGORY = "Highlight";
+function ArticleSection() {
+  const [activeCategory, setActiveCategory] = useState(INITIAL_CATEGORY);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const { posts, isLoading, hasMore, loadMore ,error} = usePaginatedPosts({
+    category: activeCategory === INITIAL_CATEGORY ? "" : activeCategory,
+    search: searchTerm,
+  });
+
+  // Get unique categories from posts only when not filtering,
+  // or use a fixed list if categories are standard.
+  // For now, let's keep track of all categories we've seen.
+  const [allCategories, setAllCategories] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (posts.length > 0) {
+      const newCategories = [...new Set(posts.map((post) => post.category))];
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setAllCategories((prev) => [...new Set([...prev, ...newCategories])]);
+    }
+  }, [posts]);
+
+  const uniqueCategories = [INITIAL_CATEGORY, ...allCategories];
 
   return (
     <>
@@ -70,6 +87,8 @@ function ArticleSection() {
               className="w-max-[360px] w-72 lg:w-[360px] h-12 pl-10 placeholder:text-brown-400 placeholder:text-body-3"
               type="text"
               placeholder="Search"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
         </div>
@@ -77,9 +96,27 @@ function ArticleSection() {
 
       {/* Card Section */}
       <section>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 px-4 py-6 lg:px-28.5 lg:pb-20">
-          {blogPosts.map((post) => {
-            return (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 px-4 py-6 lg:px-28.5 lg:pb-20 min-h-[400px]">
+          {isLoading ? (
+            <div className="col-span-full flex justify-center items-center py-20">
+              <p className="text-headline-3 text-brown-400 animate-pulse">
+                Loading articles...
+              </p>
+            </div>
+          ) : error ? (
+            <div className="col-span-full flex justify-center items-center py-20 text-center">
+              <div>
+                <p className="text-headline-4 text-red-500 mb-2">
+                  Oops! Something went wrong.
+                </p>
+                <p className="text-body-1 text-brown-400">
+                  Failed to load articles. Please check your connection and try
+                  again.
+                </p>
+              </div>
+            </div>
+          ) : posts.length > 0 ? (
+            posts.map((post) => (
               <BlogCard
                 key={post.id}
                 image={post.image}
@@ -89,16 +126,30 @@ function ArticleSection() {
                 author={post.author}
                 date={post.date}
               />
-            );
-          })}
+            ))
+          ) : (
+            <div className="col-span-full flex justify-center items-center py-20">
+              <p className="text-body-1 text-brown-400">
+                No articles found in this category.
+              </p>
+            </div>
+          )}
         </div>
       </section>
 
       {/* view more */}
       <div className="flex flex-col justify-center items-center pb-20">
-        <button type="button" className="text-body-1 hover:text-gray-400">
-          <u>View more </u>
-        </button>
+        {hasMore && (
+          <div className="flex justify-center mt-12">
+            <button
+              onClick={loadMore}
+              disabled={isLoading}
+              className="border px-10 py-3 rounded-full hover:bg-black hover:text-white transition disabled:opacity-50"
+            >
+              {isLoading ? "Loading..." : "View more"}
+            </button>
+          </div>
+        )}
       </div>
     </>
   );
