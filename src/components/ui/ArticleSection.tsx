@@ -1,4 +1,4 @@
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import TabButton from "../common/TabButton.tsx";
 import { Input } from "./input";
 import { Search } from "lucide-react";
@@ -19,7 +19,7 @@ function ArticleSection() {
   const [activeCategory, setActiveCategory] = useState(INITIAL_CATEGORY);
   const [searchTerm, setSearchTerm] = useState("");
 
-  const { posts, isLoading, isError } = useGetPosts({
+  const { posts, isLoading, error } = useGetPosts({
     category: activeCategory === INITIAL_CATEGORY ? "" : activeCategory,
     search: searchTerm,
   });
@@ -102,7 +102,7 @@ function ArticleSection() {
                 Loading articles...
               </p>
             </div>
-          ) : isError ? (
+          ) : error ? (
             <div className="col-span-full flex justify-center items-center py-20 text-center">
               <div>
                 <p className="text-headline-4 text-red-500 mb-2">

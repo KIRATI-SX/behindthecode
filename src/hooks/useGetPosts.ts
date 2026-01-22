@@ -1,60 +1,36 @@
-import { useState, useEffect } from "react";
-import { API } from "../config/api";
-import axios from "axios";
-interface Post {
-  id: number;
-  image: string;
-  category: string;
-  title: string;
-  description: string;
-  author: string;
-  date: string;
-  likes: number;
-  content: string;
-}
-
-interface GetPostsParams {
-  category?: string;
-  search?: string;
-}
+import { useEffect, useState } from "react";
+import type { Post, GetPostsParams } from "../types/post";
+import { buildPostsUrl } from "../services/posts/buildPostsUrl";
+import { fetchPosts } from "../services/posts/fetchPosts";
 
 export function useGetPosts(params: GetPostsParams = {}) {
-  const { category, search } = params;
   const [posts, setPosts] = useState<Post[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isError, setIsError] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    async function fetchPosts() {
+    const controller = new AbortController();
+
+    async function load() {
       setIsLoading(true);
+      setError(null);
+
       try {
-        const queryParams = new URLSearchParams();
-        if (category) queryParams.append("category", category);
-        if (search) queryParams.append("search", search);
-
-        const url = queryParams.toString()
-          ? `${API.BASE_URL}posts?${queryParams.toString()}`
-          : `${API.BASE_URL}posts`;
-
-        const response = await axios.get(url);
-        const data = response.data?.posts;
-
-        if (!Array.isArray(data)) {
-          throw new Error("Invalid posts data format");
-        }
-
+        const url = buildPostsUrl(params);
+        const data = await fetchPosts(url, controller.signal);
         setPosts(data);
-        setIsError(false);
-      } catch (error) {
-        console.error("Error fetching posts:", error);
-        setIsError(true);
+      } catch (err) {
+        if ((err as Error).name === "CanceledError") return;
+        setError(err as Error);
       } finally {
         setIsLoading(false);
       }
     }
 
-    fetchPosts();
-  }, [category, search]);
+    load();
 
-  return { posts, isLoading, isError };
+    return () => controller.abort();
+  }, [params.category, params.search]);
+
+  return { posts, isLoading, error };
 }
