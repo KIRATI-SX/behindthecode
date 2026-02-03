@@ -5,16 +5,15 @@ import ViewPostPage from "./ViewPostPage/ViewPostPage.tsx";
 import NotFoundPage from "./NotFoundPage/NotFoundPage.tsx";
 function App() {
   return (
-    <>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/post/:postId" element={<ViewPostPage />} />
-          {/* catch-all route */}
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
-      </BrowserRouter>
-    </>
+
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/post/:postId" element={<ViewPostPage />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
+    </BrowserRouter>
+
   );
 }
 

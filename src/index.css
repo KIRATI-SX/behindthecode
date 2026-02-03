@@ -38,6 +38,9 @@
 
   --color-white: #ffffff;
 
+
+  --color-light-green:#D7F2E9;
+
   /* 4:3 Aspect Ratio */
   --aspect-retro: 16 / 9; 
 }
@@ -94,6 +97,15 @@
   }
   body{
     background-color: var(--color-brown-100);
+  }
+
+  .category-tag-custom{
+    background-color: var(--color-light-green);
+    font-size: var(--font-size-body-2);
+    font-weight: var(--font-weight-body);
+    color: var(--color-brand-green);
+    padding: 4px 12px;
+    border-radius: 999px;
   }
 }
 
