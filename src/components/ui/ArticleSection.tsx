@@ -12,7 +12,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import BlogCard from "../common/BlogCard.tsx";
-
 import { usePaginatedPosts } from "@/hooks/usePaginatedPosts.ts";
 
 const INITIAL_CATEGORY = "Highlight";
@@ -20,14 +19,11 @@ function ArticleSection() {
   const [activeCategory, setActiveCategory] = useState(INITIAL_CATEGORY);
   const [searchTerm, setSearchTerm] = useState("");
 
-  const { posts, isLoading, hasMore, loadMore ,error} = usePaginatedPosts({
+  const { posts, isLoading, hasMore, loadMore, error } = usePaginatedPosts({
     category: activeCategory === INITIAL_CATEGORY ? "" : activeCategory,
     search: searchTerm,
   });
 
-  // Get unique categories from posts only when not filtering,
-  // or use a fixed list if categories are standard.
-  // For now, let's keep track of all categories we've seen.
   const [allCategories, setAllCategories] = useState<string[]>([]);
 
   useEffect(() => {
@@ -97,7 +93,7 @@ function ArticleSection() {
       {/* Card Section */}
       <section>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 px-4 py-6 lg:px-28.5 lg:pb-20 min-h-[400px]">
-          {isLoading ? (
+          {isLoading && posts.length <= 0 ? (
             <div className="col-span-full flex justify-center items-center py-20">
               <p className="text-headline-3 text-brown-400 animate-pulse">
                 Loading articles...
@@ -119,6 +115,7 @@ function ArticleSection() {
             posts.map((post) => (
               <BlogCard
                 key={post.id}
+                id={post.id}
                 image={post.image}
                 category={post.category}
                 title={post.title}
