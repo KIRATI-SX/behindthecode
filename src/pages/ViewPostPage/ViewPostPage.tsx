@@ -12,6 +12,8 @@ function ViewPostPage() {
   const [post, setPost] = useState<Post | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const[isLogin,setIsLogin]=useState(false);
+
 
   async function getPost(postId: number) {
     try {
@@ -31,14 +33,17 @@ function ViewPostPage() {
     if (postId) {
       getPost(Number(postId));
     }
+    setIsLogin(false);
   }, [postId]);
 
   return (
     <>
       <NavBar />
+      {loading ? <p>Loading...</p> : null }
       {!loading && post && (
         <PostView
           id={post.id}
+          isLogin={isLogin}
           image={post.image}
           category={post.category}
           title={post.title}
