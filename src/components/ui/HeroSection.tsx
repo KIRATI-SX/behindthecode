@@ -12,7 +12,7 @@ function HeroSection() {
         <img
           src="https://res.cloudinary.com/dcbpjtd1r/image/upload/v1728449784/my-blog-post/xgfy0xnvyemkklcqodkg.jpg"
           alt="A man wearing a brown plaid shirt and knit beanie standing in a forest with yellow foliage, with a black and white cat perched on his shoulder."
-          className="rounded-2xl aspect-retro w-96.5 h-132.25" />
+          className="rounded-2xl aspect-retro w-96.5 h-132.25 object-cover" />
         {/* Section3 */}
         <div className="flex flex-col lg:w-86.75 lg:h-33.5 justify-center w-max-[347px]">
           <div className="flex flex-col gap-1">

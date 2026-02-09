@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ASSETS } from "../../config/assets.config.ts";
 import { Button } from "../common/Button";
 import { Menu } from "lucide-react";
+import { Link } from "react-router-dom";
 
 function NavBar() {
   const [isOpenMenu, setIsOpenMenu] = useState(false);
@@ -13,9 +14,9 @@ function NavBar() {
   return (
     <>
       <nav className="flex flex-row items-center justify-between px-4 md:px-28.5 py-6 h-20 relative">
-        <a href="#" aria-label="Go to home">
+        <Link to={'/'} aria-label="Go to home">
           <img src={ASSETS.logo} alt="logo website" />
-        </a>
+        </Link>
         <div
           aria-label="Authentication"
           className="hidden lg:flex flex-row gap-2"

@@ -12,7 +12,9 @@ export function usePaginatedPosts(params: GetPostsParams = {}) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
   const [pageToFetch, setPageToFetch] = useState<number | null>(1);
-
+  const [totalPages, setTotalPages] = useState<number | null>();
+  const [hasMore, setHasMore] = useState(true);
+  
   // Reset when filters change
   useEffect(() => {
     setPosts([]);
@@ -44,6 +46,9 @@ export function usePaginatedPosts(params: GetPostsParams = {}) {
         );
         setCurrentPage(data.currentPage);
         setNextPage(data.nextPage);
+        setTotalPages(data.totalPages);
+        console.log(`${totalPages}-${currentPage}`);
+        setHasMore(totalPages !== currentPage);
         setPageToFetch(null); // Clear after fetch
       } catch (err) {
         if ((err as Error).name !== "CanceledError") {
@@ -63,12 +68,12 @@ export function usePaginatedPosts(params: GetPostsParams = {}) {
     if (!isLoading && nextPage !== null) {
       setPageToFetch(nextPage);
     }
-  }
 
+  }
   return {
     posts,
     isLoading,
-    hasMore: nextPage !== null,
+    hasMore,
     loadMore,
     currentPage,
     error,
