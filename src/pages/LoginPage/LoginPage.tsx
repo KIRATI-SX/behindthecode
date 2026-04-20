@@ -1,4 +1,10 @@
+import { useState } from "react";
+
 const LoginPage = () => {
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+
+
   return (
     <div className="flex flex-col w-full h-screen items-center justify-center bg-brown-100">
       <div className="bg-brown-200 rounded-3xl p-16 w-full max-w-[640px] flex flex-col items-center gap-10">
@@ -17,6 +23,8 @@ const LoginPage = () => {
               type="email"
               id="input_email"
               placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="p-4 rounded-xl border border-transparent bg-white w-full text-body-1 focus:outline-none focus:ring-2 focus:ring-brand-orange"
             />
           </div>
@@ -31,6 +39,8 @@ const LoginPage = () => {
               type="password"
               id="input_password"
               placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className="p-4 rounded-xl border border-transparent bg-white w-full text-body-1 focus:outline-none focus:ring-2 focus:ring-brand-orange"
             />
           </div>

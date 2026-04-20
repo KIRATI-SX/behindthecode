@@ -13,6 +13,12 @@ import CategoryManagementPage from "./AdminPart/CategoryManagementPage.tsx";
 import ProfileManagementPage from "./AdminPart/ProfileManagementPage.tsx";
 import NotificationManagementPage from "./AdminPart/NotificationMagementPage.tsx";
 import ResetPasswordPage from "./AdminPart/ResetPasswordPae.tsx";
+import SignupPage from "./Signup/SignupPage.tsx";
+
+
+
+
+
 function App() {
   return (
     <>
@@ -21,6 +27,7 @@ function App() {
         <Route path="/post/:postId" element={<ViewPostPage />} />
         <Route path="/health" element={<HealthTestPage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
         <Route path="/profile" element={<SettingProfilePage />} />
         <Route path="/secrity" element={<SettingSecurityPage />} />
         <Route
